@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".CreateAccountPage">
 
+    <TextView
+        android:id="@+id/textCreateAccountTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="89dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
