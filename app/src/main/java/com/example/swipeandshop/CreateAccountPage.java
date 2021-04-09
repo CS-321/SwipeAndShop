@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class CreateAccountPage extends AppCompatActivity {
 
     EditText registerFullName, registerEmail, registerPhone, registerPassword;
