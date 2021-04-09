@@ -49,7 +49,23 @@ public class CreateAccountPage extends AppCompatActivity {
                 String password = registerPassword.getText().toString();
 
                 //validate data
-                validate(fullName, email, phone, password);
+
+                if(fullName.isEmpty()) {
+                    registerFullName.setError("Full Name is required");
+                    return;
+                }
+                if(email.isEmpty()) {
+                    registerEmail.setError("Email is required");
+                    return;
+                }
+                if(phone.isEmpty()) {
+                    registerPhone.setError("Phone number is required");
+                    return;
+                }
+                if(password.isEmpty()) {
+                    registerPassword.setError("Password is required");
+                    return;
+                }
 
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
@@ -72,24 +88,5 @@ public class CreateAccountPage extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LoginPage.class));
             }
         });
-    }
-
-    protected void validate(String fullName, String email, String phone, String password) {
-        if(fullName.isEmpty()) {
-            registerFullName.setError("Full Name is required");
-            return;
-        }
-        if(email.isEmpty()) {
-            registerEmail.setError("Email is required");
-            return;
-        }
-        if(phone.isEmpty()) {
-            registerPhone.setError("Phone number is required");
-            return;
-        }
-        if(password.isEmpty()) {
-            registerPassword.setError("Password is required");
-            return;
-        }
     }
 }
