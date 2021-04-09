@@ -67,6 +67,10 @@ public class CreateAccountPage extends AppCompatActivity {
                     return;
                 }
 
+                if(password.length()<6) {
+                    registerPassword.setError("Password needs to be at least 6 characters long");
+                }
+
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
