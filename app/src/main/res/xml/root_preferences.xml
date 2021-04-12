@@ -54,7 +54,11 @@
 
 
     <PreferenceCategory app:title="Payments">
-
+        <Preference app:title="Set Payment Method">
+            <intent
+                android:targetPackage="com.example.swipeandshop"
+                android:targetClass="com.example.swipeandshop.PaymentPage"/>
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>
