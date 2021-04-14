@@ -4,29 +4,53 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    private Button button;
+
+    Button gotoRegister, gotoLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        gotoRegister = findViewById(R.id.button2);
+        gotoLogin = findViewById(R.id.button3);
+
+        gotoRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                OpenProductPage();
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), CreateAccountPage.class));
+            }
+        });
+
+        gotoLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), LoginPage.class));
             }
         });
     }
 
-    public void OpenProductPage(){
-        Intent intent = new Intent(this, ProductPage.class);
-        startActivity(intent);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsPage.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
