@@ -1,0 +1,28 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <EditTextPreference
+            app:key="cardnum"
+            app:title="Change card number"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            android:defaultValue="false"
+            android:key="seccode"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Change security code" />
+        <EditTextPreference
+            android:defaultValue="false"
+            android:key="billaddress"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Change billing address"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            android:defaultValue="false"
+            android:key="expdate"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Change expiration date"
+            app:useSimpleSummaryProvider="true" />
+</PreferenceScreen>

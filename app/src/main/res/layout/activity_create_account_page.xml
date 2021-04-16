@@ -42,8 +42,6 @@
         android:text="Email"
 
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextEmailAddress2"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -70,8 +68,6 @@
         android:layout_marginTop="28dp"
         android:text="Password"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextPassword"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -79,15 +75,13 @@
         android:id="@+id/editTextTextPersonName"
         android:layout_width="213dp"
         android:layout_height="38dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
         android:background="#221E1D1D"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.204" />
 
@@ -95,9 +89,9 @@
         android:id="@+id/editTextTextEmailAddress2"
         android:layout_width="213dp"
         android:layout_height="38dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
         android:background="#221E1D1D"
         android:ems="10"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,12 +102,12 @@
         android:layout_width="213dp"
         android:layout_height="38dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
         android:background="#221E1D1D"
         android:ems="10"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.601"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress2" />
 
     <EditText
@@ -121,8 +115,8 @@
         android:layout_width="213dp"
         android:layout_height="38dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
         android:background="#221E1D1D"
         android:ems="10"
         android:inputType="textPassword"

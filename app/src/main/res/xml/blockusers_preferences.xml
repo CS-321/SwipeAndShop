@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <MultiSelectListPreference
+        android:id="@+id/blockeduserlist"
+        android:dialogTitle="list"
+        android:key="mode_repeat"
+        android:summary=""
+        android:title="Block User List"
+        android:entries="@array/empty_array"
+        android:entryValues="@array/empty_array"
+        android:defaultValue="@array/empty_array" />
+
+
+    <EditTextPreference
+        android:id="@+id/blockusername"
+        android:defaultValue=""
+        android:key="blockusername"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Block User Name" />
+
+</PreferenceScreen>
+
