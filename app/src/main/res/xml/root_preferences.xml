@@ -5,14 +5,14 @@
 
         <EditTextPreference
             app:key="UserName"
-            app:title="Change user name"
+            app:title="User Name"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
             android:defaultValue="false"
             android:key="UserPassword"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Change password" />
+            android:title="Password" />
         <EditTextPreference
             android:defaultValue="false"
             android:key="UserAddress"
@@ -20,6 +20,12 @@
             android:singleLine="true"
             android:title="Address"
             app:useSimpleSummaryProvider="true" />
+        <Preference
+            android:title="Location"
+            android:summary="Edit Your Location">
+            <intent android:targetPackage="com.example.swipeandshop"
+                android:targetClass="com.example.swipeandshop.LocationPage"/>
+        </Preference>
 
     </PreferenceCategory>
 
@@ -28,6 +34,12 @@
         <SwitchPreferenceCompat
             app:key="BlockUsers"
             app:title="Block users" />
+
+        <Preference app:title="Block Users List">
+            <intent
+                android:targetPackage="com.example.swipeandshop"
+                android:targetClass="com.example.swipeandshop.BlockUsersPage"/>
+        </Preference>
 
     </PreferenceCategory>
 
@@ -52,7 +64,6 @@
 
     </PreferenceCategory>
 
-
     <PreferenceCategory app:title="Payments">
         <Preference app:title="Set Payment Method">
             <intent
@@ -60,5 +71,8 @@
                 android:targetClass="com.example.swipeandshop.PaymentPage"/>
         </Preference>
     </PreferenceCategory>
+
+    <Preference
+        android:layout="@layout/logout"/>
 
 </PreferenceScreen>
