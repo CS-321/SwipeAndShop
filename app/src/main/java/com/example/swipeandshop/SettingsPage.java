@@ -1,8 +1,6 @@
 package com.example.swipeandshop;
 
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.StrictMode;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
