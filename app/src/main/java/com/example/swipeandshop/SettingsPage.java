@@ -98,9 +98,9 @@ public class SettingsPage extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
             // Create preference manager based on Firebase backed datastore.
-            PreferenceManager preferenceManager = getPreferenceManager();
-            DataStore dataStore = new DataStore();
-            preferenceManager.setPreferenceDataStore(dataStore);
+//            PreferenceManager preferenceManager = getPreferenceManager();
+//            DataStore dataStore = new DataStore();
+//            preferenceManager.setPreferenceDataStore(dataStore);
 
         }
     }

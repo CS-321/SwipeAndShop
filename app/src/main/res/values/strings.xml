@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">SwipeAndShop</string>
+    <string name="latitude">Sample Latitude</string>
+    <string name="longitude">Sample Longitude</string>
+    <string name="address">Sample Address</string>
+    <string-array name="empty_array">
+        <item>Nick</item>
+        <item>Robert</item>
+        <item>Mary</item>
+        <item>Linda</item>
+        <item>David</item>
+        <item>Jessica</item>
+    </string-array>
+
+
+
 </resources>
