@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "571350355492",
+    "firebase_url": "https://swipeandshop-8168d-default-rtdb.firebaseio.com",
+    "project_id": "swipeandshop-8168d",
+    "storage_bucket": "swipeandshop-8168d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571350355492:android:23a59663c668024af1d2b1",
+        "android_client_info": {
+          "package_name": "com.example.myapplicationsettings"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571350355492-ar34of99qfi9snksvfre1musqn9uu3mh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe5_mbouGm0ki2ikmZdiJUQipo2-1yJyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571350355492-ar34of99qfi9snksvfre1musqn9uu3mh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571350355492:android:8c40cb76afae4385f1d2b1",
+        "android_client_info": {
+          "package_name": "com.example.registerlogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571350355492-ar34of99qfi9snksvfre1musqn9uu3mh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe5_mbouGm0ki2ikmZdiJUQipo2-1yJyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571350355492-ar34of99qfi9snksvfre1musqn9uu3mh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571350355492:android:8fcf376ab4095cd1f1d2b1",
+        "android_client_info": {
+          "package_name": "com.example.swipeandshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571350355492-ar34of99qfi9snksvfre1musqn9uu3mh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe5_mbouGm0ki2ikmZdiJUQipo2-1yJyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571350355492-ar34of99qfi9snksvfre1musqn9uu3mh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571350355492:android:6e303b06242393baf1d2b1",
+        "android_client_info": {
+          "package_name": "edu.gmu.swiper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571350355492-ar34of99qfi9snksvfre1musqn9uu3mh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe5_mbouGm0ki2ikmZdiJUQipo2-1yJyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571350355492-ar34of99qfi9snksvfre1musqn9uu3mh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
