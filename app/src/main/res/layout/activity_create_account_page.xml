@@ -22,23 +22,23 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:text="Full Name"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20999998" />
+        app:layout_constraintVertical_bias="0.219" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="28dp"
         android:text="Email"
 
         android:textSize="18sp"
@@ -49,9 +49,9 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="35dp"
 
         android:text="Phone"
         android:textSize="18sp"
@@ -62,8 +62,8 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
 
         android:layout_marginTop="28dp"
         android:text="Password"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/fullName"
         android:layout_width="213dp"
         android:layout_height="38dp"
         android:layout_marginEnd="30dp"
@@ -95,7 +95,7 @@
         android:background="#221E1D1D"
         android:ems="10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/fullName" />
 
     <EditText
         android:id="@+id/editTextPhone"
@@ -123,6 +123,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
 
+    <EditText
+        android:id="@+id/verifyPassword"
+        android:layout_width="213dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:background="#221E1D1D"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="212dp"
@@ -134,9 +147,10 @@
         app:backgroundTint="#101010"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.218" />
 
     <TextView
         android:id="@+id/textView6"
@@ -147,5 +161,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="23dp"
+        android:text="Verify Password"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
