@@ -1,23 +1,37 @@
 package com.example.swipeandshop;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceDataStore;
+import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+
 public class SettingsPage extends AppCompatActivity {
+
+    public void logOut(View view) {
+        FirebaseAuth mAuth;
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,73 +48,113 @@ public class SettingsPage extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("General Settings");
         }
-
     }
-    //Add Custom user preference DataStore in Firebase Realtime DB.
-    //I  can save user preferences and we can see it in realtime database
-    // It is supposed to be used by Android preference manager to overwrite
-    // where settings are stored instead of default location.
-    public static class DataStore extends PreferenceDataStore {
 
-        // Save user preference in Firebase DB.
+    public static class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
-        public void putString(String key, @Nullable String value) {
+        public void onResume() {
+            super.onResume();
+            getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             try {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference(key);
-                myRef.setValue(value);
-
-            } catch (Exception e){
+                DatabaseReference myRef = database.getReference("users/" + uid + "/" + key);
+                switch (key) {
+                    case "BlockUsers":
+                    case "EnableNotifications":
+                        myRef.setValue(sharedPreferences.getBoolean(key, false));
+                        break;
+                    default:
+                        myRef.setValue(sharedPreferences.getString(key, "null"));
+                }
+                myRef.setValue(sharedPreferences.getString(key, "null"));
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }
-        final String[] s = new String[1];
 
-        // Load user preference from DB to Android.
-        //I am running into database firebase problem.
-        // A problem with Firebase reads is it's asynchronous. I can't read user setting from DB
-        // and wait for response. A response might come back any time.
-        // We need to read values from DB once and synchronously.
+        private String name, email, uid;
+
         @Override
-        @Nullable
-        public String getString(String key, @Nullable String defValue) {
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                name = user.getDisplayName();
+                email = user.getEmail();
+                boolean emailVerified = user.isEmailVerified();
+                uid = user.getUid();
+            } else
+                return;
+
+            PreferenceManager preferenceManager = getPreferenceManager();
+            setPreferencesFromResource(R.xml.root_preferences, rootKey);
             DatabaseReference mDatabase;
             mDatabase = FirebaseDatabase.getInstance().getReference();
 
-            mDatabase.child(key).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-
-                // This method executes asynchronously. I can't read DB with this predictably.
+            EditTextPreference textPreference = (EditTextPreference) preferenceManager.findPreference("UserName");
+            Task<DataSnapshot> t = mDatabase.child("users").child(uid).child("UserName").get();
+            EditTextPreference finalTextPreference = textPreference;
+            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     if (!task.isSuccessful()) {
                         Log.e("firebase", "Error getting data", task.getException());
-                    }
-                    else {
-                        s[0] = String.valueOf(task.getResult().getValue());
-                        System.out.println("READ BACK " + s[0]); // this prints fine but some time in the future
+                    } else {
+                        finalTextPreference.setText(String.valueOf(task.getResult().getValue()));
                     }
                 }
             });
-            // Even this sleep doesn't wait for onComplete.
-            try {
-                Thread.sleep(3000);
-            }
-            catch (Exception e){}
-            System.out.println("READ BACK 2 " + s[0]); // this print null because it's always executed before onComplete
-            return s[0];
-        }
-    }
 
+            textPreference = (EditTextPreference) preferenceManager.findPreference("UserAddress");
+            t = mDatabase.child("users").child(uid).child("UserAddress").get();
+            EditTextPreference finalTextPreference1 = textPreference;
+            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                    } else {
+                        finalTextPreference1.setText(String.valueOf(task.getResult().getValue()));
+                    }
+                }
+            });
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+            SwitchPreferenceCompat sw = (SwitchPreferenceCompat) preferenceManager.findPreference("BlockUsers");
+            t = mDatabase.child("users").child(uid).child("BlockUsers").get();
+            SwitchPreferenceCompat finalsw = sw;
+            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                    } else {
+                        finalsw.setChecked(String.valueOf(task.getResult().getValue()) == "true" ? true : false);
+                    }
+                }
+            });
 
-            // Create preference manager based on Firebase backed datastore.
-//            PreferenceManager preferenceManager = getPreferenceManager();
-//            DataStore dataStore = new DataStore();
-//            preferenceManager.setPreferenceDataStore(dataStore);
+            sw = (SwitchPreferenceCompat) preferenceManager.findPreference("EnableNotifications");
+            t = mDatabase.child("users").child(uid).child("EnableNotifications").get();
+            SwitchPreferenceCompat finalsw2 = sw;
+            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                    } else {
+                        finalsw2.setChecked(String.valueOf(task.getResult().getValue()) == "true" ? true : false);
+                    }
+                }
+            });
 
         }
     }
