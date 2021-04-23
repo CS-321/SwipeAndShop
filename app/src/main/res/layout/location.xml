@@ -95,29 +95,4 @@
         app:layout_constraintTop_toTopOf="parent"
         android:checked="true"/>
 
-    <TextView
-        android:id="@+id/sensor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="340dp"
-        android:text="Wifi Used"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Switch
-        android:id="@+id/gpsSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="332dp"
-        android:layout_marginTop="332dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,10 +27,9 @@ public class LocationPage extends AppCompatActivity {
     private static final int PERMISSION_FINE_LOCATION = 0;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
-    TextView latitude, updates, sensor, longitude, address;
-    Switch updateSwitch, gpsSwitch;
+    TextView latitude, updates, longitude, address;
+    Switch updateSwitch;
     FusedLocationProviderClient fusedLocationProviderClient;
-    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,26 +38,12 @@ public class LocationPage extends AppCompatActivity {
         longitude = findViewById(R.id.longitude);
         updates = findViewById(R.id.updates);
         address = findViewById(R.id.address);
-        sensor = findViewById(R.id.sensor);
         updateSwitch = findViewById(R.id.updateSwitch);
-        gpsSwitch = findViewById(R.id.gpsSwitch);
 
         locationRequest = new LocationRequest();
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        gpsSwitch.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if(gpsSwitch.isChecked()) {
-                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                    sensor.setText("GPS Used");
-                }
-                else {
-                    locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-                    sensor.setText("Wifi Used");
-                }
-            }
-        });
 
         locationCallback = new LocationCallback() {
             @Override
@@ -120,7 +105,6 @@ public class LocationPage extends AppCompatActivity {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                   // if(location != null)
                     updateLocation(location);
                 }
             });
