@@ -4,7 +4,7 @@
     <PreferenceCategory app:title="Personal">
 
         <EditTextPreference
-            app:key="UserName"
+            app:key="name"
             app:title="User Name"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
@@ -33,7 +33,8 @@
 
         <SwitchPreferenceCompat
             app:key="BlockUsers"
-            app:title="Block users" />
+            app:title="Block users"
+            app:summary="Click to switch BLOCKING feature on or off"/>
 
         <Preference app:title="Block Users List">
             <intent
@@ -41,6 +42,9 @@
                 android:targetClass="com.example.swipeandshop.BlockUsersPage"/>
         </Preference>
 
+        <SwitchPreferenceCompat
+            app:title="Online Status"
+            app:summary="Click to switch on or off"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Notifications">
@@ -52,16 +56,13 @@
             android:defaultValue="true"
             app:key="EnableNotifications"
             app:title="Enable notifications" />
-        <ListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="ReplyAction"
-            app:title="Reply"
-            app:useSimpleSummaryProvider="true" />
 
+        <ListPreference
+            android:dialogTitle="Turn off Notifications"
+            android:entries="@array/noti_entries"
+            android:entryValues="@array/noti_values"
+            android:key="notiList"
+            android:title="Turn off Notifications"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Payments">

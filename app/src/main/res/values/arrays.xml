@@ -9,4 +9,22 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <string-array name="noti_entries">
+        <item>For 15 minutes</item>
+        <item>For 30 minutes</item>
+        <item>For 1 hour</item>
+        <item>For 3 hours</item>
+        <item>For 6 hours</item>
+        <item>Until I turn it on</item>
+    </string-array>
+
+    <integer-array name="noti_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </integer-array>
 </resources>

@@ -100,8 +100,8 @@ public class SettingsPage extends AppCompatActivity {
             DatabaseReference mDatabase;
             mDatabase = FirebaseDatabase.getInstance().getReference();
 
-            EditTextPreference textPreference = (EditTextPreference) preferenceManager.findPreference("UserName");
-            Task<DataSnapshot> t = mDatabase.child("users").child(uid).child("UserName").get();
+            EditTextPreference textPreference = (EditTextPreference) preferenceManager.findPreference("name");
+            Task<DataSnapshot> t = mDatabase.child("users").child(uid).child("name").get();
             EditTextPreference finalTextPreference = textPreference;
             t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override

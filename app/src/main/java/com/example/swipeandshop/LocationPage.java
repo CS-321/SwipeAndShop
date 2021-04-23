@@ -65,8 +65,6 @@ public class LocationPage extends AppCompatActivity {
                 else
                     stopLocationUpdates();
             }
-
-
         });
         updateGPS();
     }
