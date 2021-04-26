@@ -13,6 +13,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +29,11 @@ public class ProductPage extends AppCompatActivity {
     Button cancelProductBtn;
     Button saveProductBtn;
     CardView createProductView;
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+    FirebaseUser user;
+    static int id = 0;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,6 +60,11 @@ public class ProductPage extends AppCompatActivity {
         productCardList = findViewById(R.id.dataList); //holds all the users products
         addProductBtn = findViewById(R.id.addProductBtn);
         products = new ArrayList<>();
+
+        //Database
+        firebaseAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
 
         // Create Product View Fields
         cancelProductBtn = findViewById(R.id.cancelButton);
@@ -119,6 +134,12 @@ public class ProductPage extends AppCompatActivity {
         adapter.setProductLocation(-1);
         createProductView.setVisibility(View.GONE);
         addProductBtn.setVisibility(View.VISIBLE);
+
+        //Add product to Realtime database
+        user = firebaseAuth.getCurrentUser();
+        myRef.child("users").child(user.getUid()).child("products").child(""+id).child("name").setValue(product.getName());
+        myRef.child("users").child(user.getUid()).child("products").child(""+id).child("desc").setValue(product.getDescription());
+        id++;
     }
 
     public CardView getCreateProductView(){
