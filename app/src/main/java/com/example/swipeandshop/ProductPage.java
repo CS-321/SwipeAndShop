@@ -200,7 +200,7 @@ public class ProductPage extends AppCompatActivity {
         });
     }
 
-    /**Loads data into teh firebaseUI adapter and displays it in the grid layout.*/
+    /**Loads data into the firebaseUI adapter and displays it in the grid layout.*/
     public void showData(){
         // This takes the loaded data from firebase and puts it into the adapter.
         myAdapter = new FirebaseRecyclerAdapter<Product, ProductViewHolder>(options) {
@@ -260,6 +260,7 @@ public class ProductPage extends AppCompatActivity {
         this.currentLocation = productIndex;
     }
 
+    /**Removes product from product list and database.*/
     public void removeProduct(int position){
         // removed product from products list and store in a temp var.
         Product tempProduct = products.remove(position);
