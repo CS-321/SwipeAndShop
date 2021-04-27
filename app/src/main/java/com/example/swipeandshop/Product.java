@@ -1,20 +1,24 @@
 package com.example.swipeandshop;
 
 public class Product {
-    private String name;
-    private String description;
-    private String seller; //private User seller;
-    private float price;
+    private String name = "";
+    private String description = "";
+    private String seller = "";
+    String productId = "";//private User seller;
+    private float price = 0;
     private int image; //private ImageClass image;
-    private int localId = -1;
 
-    public Product(String name, String description, String seller, float price, int image, int localId){
+    public Product(){
+
+    }
+
+    public Product(String name, String description, String seller, float price, int image, String productId){
         this.name = name;
         this.description = description;
         this.seller = seller;
         this.price = price;
         this.image = image;
-        this.localId = localId;
+        this.productId = productId;
     }
 
     public String getName(){
@@ -35,5 +39,9 @@ public class Product {
 
     public int getImage() {
         return image;
+    }
+
+    public String getProductId() {
+        return productId;
     }
 }
