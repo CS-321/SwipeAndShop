@@ -11,7 +11,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button gotoRegister, gotoLogin, goToChat;
+    Button gotoRegister, gotoLogin, goToChat, goToFeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         gotoRegister = findViewById(R.id.button2);
         gotoLogin = findViewById(R.id.button3);
         goToChat = findViewById(R.id.button4);
+        goToFeed = findViewById(R.id.button5);
 
         gotoRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), ChatPage.class));
+            }
+        });
+
+        goToFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), FeedPage.class));
             }
         });
     }
