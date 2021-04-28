@@ -6,18 +6,18 @@ public class Product {
     private String seller = "";
     String productId = "";//private User seller;
     private float price = 0;
-    private int image; //private ImageClass image;
+    private String imageUrl; //private ImageClass image;
 
     public Product(){
 
     }
 
-    public Product(String name, String description, String seller, float price, int image, String productId){
+    public Product(String name, String description, String seller, float price, String imageUrl, String productId){
         this.name = name;
         this.description = description;
         this.seller = seller;
         this.price = price;
-        this.image = image;
+        this.imageUrl = imageUrl;
         this.productId = productId;
     }
 
@@ -37,11 +37,15 @@ public class Product {
         return seller;
     }
 
-    public int getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getProductId() {
         return productId;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
