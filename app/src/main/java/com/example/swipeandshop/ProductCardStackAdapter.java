@@ -52,7 +52,7 @@ public class ProductCardStackAdapter extends RecyclerView.Adapter<ProductCardSta
 
         void setData(Product data) {
             Picasso.get()
-                    .load(data.getImage())
+                    .load(data.getImageUrl())
                     .fit()
                     .centerCrop()
                     .into(image);

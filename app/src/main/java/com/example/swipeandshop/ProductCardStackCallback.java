@@ -25,7 +25,7 @@ public class ProductCardStackCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return old.get(oldItemPosition).getImage() == newer.get(newItemPosition).getImage();
+        return old.get(oldItemPosition).getImageUrl() == newer.get(newItemPosition).getImageUrl();
     }
 
     @Override
