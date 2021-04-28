@@ -227,7 +227,6 @@ public class ProductPage extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                products.clear();
                 for(DataSnapshot item_snapshot:snapshot.getChildren()){
                     Product tempProduct = item_snapshot.getValue(Product.class);
                     // make sure user hasn't already swiped on this object.

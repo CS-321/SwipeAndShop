@@ -96,8 +96,8 @@ public class FeedPage extends AppCompatActivity {
         allProductRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                products.clear();
                 for(DataSnapshot item_snapshot:snapshot.getChildren()){
-                    System.out.println(item_snapshot.getValue().toString());
                     Product tempProduct = item_snapshot.getValue(Product.class);
                     products.add(tempProduct);
                 }
