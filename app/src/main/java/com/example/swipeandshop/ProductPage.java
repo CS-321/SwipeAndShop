@@ -223,11 +223,11 @@ public class ProductPage extends AppCompatActivity {
 
     /**Retrieves data from firebase when page is first loaded.*/
     public void loadData(){
-        products.clear();
         // this will load data from firebase and put it into the products list.
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                products.clear();
                 for(DataSnapshot item_snapshot:snapshot.getChildren()){
                     Product tempProduct = item_snapshot.getValue(Product.class);
                     // make sure user hasn't already swiped on this object.
