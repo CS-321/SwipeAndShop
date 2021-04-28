@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.text.Layout;
@@ -17,13 +19,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -32,6 +38,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,20 +55,30 @@ public class ProductPage extends AppCompatActivity {
     //Product page objects.
     Activity productActivity;
     CardView createProductView;
+
     int currentLocation = -1;
+    String currentUrl = "";
 
     // Buttons
     Button addProductBtn;
     Button cancelProductBtn;
     Button saveProductBtn;
+    Button addImageBtn;
 
     // Firebase references.
     FirebaseAuth firebaseAuth;
     FirebaseDatabase database;
+    FirebaseStorage storage;
+    StorageReference storageRef;
     FirebaseRecyclerOptions<Product> options;
     FirebaseRecyclerAdapter<Product, ProductViewHolder> myAdapter;
     DatabaseReference myRef;
+    DatabaseReference allProductRef;
     FirebaseUser user;
+
+    //Image info
+    private Uri imageUri;
+    private ImageView imageView;
 
 
     @Override
@@ -87,15 +107,23 @@ public class ProductPage extends AppCompatActivity {
         // Product page objects.
         productCardList = findViewById(R.id.dataList); //holds all the users products
         addProductBtn = findViewById(R.id.addProductBtn);
+        addImageBtn = findViewById(R.id.addImageBtn);
         productActivity = (Activity)this;
         products = new ArrayList<>();
-
 
         //Database
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
+        storage = FirebaseStorage.getInstance();
         user = firebaseAuth.getCurrentUser();
+        //Gets reference to db area with only users products
         myRef = database.getReference().child("users").child(user.getUid()).child("products");
+        //Gets reference to db area where all products are stored.
+        allProductRef = database.getReference().child("products");
+
+        //Firebase Storage
+        storageRef = storage.getReference();
+        imageView = findViewById(R.id.imageView);
 
         // Create Product View Fields
         cancelProductBtn = findViewById(R.id.cancelButton);
@@ -153,11 +181,6 @@ public class ProductPage extends AppCompatActivity {
         EditText name = createProductView.findViewById(R.id.nameInput);
         EditText desc = createProductView.findViewById(R.id.descriptionInput); //LET IN
 
-
-         // updating the grid view to include the new product
-        createProductView.setVisibility(View.GONE);
-        addProductBtn.setVisibility(View.VISIBLE);
-
         //Add product to Realtime database
         user = firebaseAuth.getCurrentUser();
 
@@ -165,17 +188,34 @@ public class ProductPage extends AppCompatActivity {
         // if currentLocation < 0 then create a new object.
         if(currentLocation >= 0){
             product = products.remove(currentLocation);
-            product = new Product(name.getText().toString(),desc.getText().toString(), "Javi", 10.90f, R.drawable.ic_launcher_background,product.productId);
+            if(currentUrl.length() == 0){
+                currentUrl = product.getImageUrl();
+            }
+            product = new Product(name.getText().toString(),desc.getText().toString(), "Javi", 10.90f, currentUrl,product.productId);
             products.add(0,product);
             myRef.child(product.productId).setValue(product);
+            allProductRef.child(product.productId).setValue(product);
         }else{
+            if(currentUrl.length() == 0){
+                Toast.makeText(ProductPage.this, "You need to add at least one image.", Toast.LENGTH_SHORT).show();
+                return;
+            }
             DatabaseReference newRef = myRef.push();
-            product = new Product(name.getText().toString(),desc.getText().toString(), "Javi", 10.90f, R.drawable.ic_launcher_background,newRef.getKey());
+            product = new Product(name.getText().toString(),desc.getText().toString(), "Javi", 10.90f, currentUrl,newRef.getKey());
             products.add(product); // add our new product to the list
             newRef.setValue(product);
+            allProductRef.child(product.productId).setValue(product);
         }
 
+        //This closes the editing/creation of the product.
+        createProductView.setVisibility(View.GONE);
+        addProductBtn.setVisibility(View.VISIBLE);
+
+        //sets default image (will be changed to show current product image)
+        imageView.setImageResource(R.drawable.googleg_disabled_color_18);
         this.currentLocation = -1;
+        this.currentUrl = "";
+        // updating the grid view to include the new product
         productCardList.setAdapter(myAdapter);
     }
 
@@ -263,8 +303,11 @@ public class ProductPage extends AppCompatActivity {
     public void removeProduct(int position){
         // removed product from products list and store in a temp var.
         Product tempProduct = products.remove(position);
+        //remove image associated with product
+        //removeFromFirebase(tempProduct.getImageUrl());
         // remove product using product id.
         myRef.child(tempProduct.productId).removeValue();
+        allProductRef.child(tempProduct.productId).removeValue();
         // update the adapter.
         productCardList.setAdapter(myAdapter);
     }
@@ -291,13 +334,98 @@ public class ProductPage extends AppCompatActivity {
                 saveOnClick();
             }
         });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Opens up our photos or Google drive
+                Intent galleryIntent = new Intent();
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent , 2);
+            }
+        });
+
+        addImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imageUri != null){
+                    Toast.makeText(ProductPage.this, "You have selected an image", Toast.LENGTH_SHORT).show();
+                    uploadToFirebase(imageUri);
+                }else{
+                    Toast.makeText(ProductPage.this, "Please Select Image", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode ==2 && resultCode == RESULT_OK && data != null){
+            imageUri = data.getData();
+            imageView.setImageURI(imageUri);
+        }
+    }
 
+    private void uploadToFirebase(Uri uri){
 
+        final StorageReference fileRef = storageRef.child(System.currentTimeMillis() + "." + getFileExtension(uri));
+        fileRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // store url to be used later.
+                        currentUrl = uri.toString();
+                        Toast.makeText(ProductPage.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                        imageUri = null;
+                    }
+                });
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                //progressBar.setVisibility(View.VISIBLE);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(ProductPage.this, "Uploading Failed !!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
+    private String getFileExtension(Uri mUri){
 
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(mUri));
 
+    }
 
+    /**Remove image from firebase.*/
+    private void removeFromFirebase(String url){
+        if(url.length() == 0){
+            return;
+        }
+        StorageReference delRef = storageRef.child(url);
+        // Delete the file
+        delRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+            }
+        });
+    }
 }
