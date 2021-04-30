@@ -39,12 +39,6 @@ public class LocationPage extends AppCompatActivity {
         updates = findViewById(R.id.updates);
         address = findViewById(R.id.address);
         updateSwitch = findViewById(R.id.updateSwitch);
-
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(1000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -52,7 +46,7 @@ public class LocationPage extends AppCompatActivity {
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-                    updateLocation(location);
+                    updateLocation();
                 }
             }
         };
@@ -66,7 +60,47 @@ public class LocationPage extends AppCompatActivity {
                     stopLocationUpdates();
             }
         });
-        updateGPS();
+        updateLocation();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void startLocationUpdates() {
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+        updateLocation();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == PERMISSION_FINE_LOCATION) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+                updateLocation();
+            }
+            else {
+                Toast.makeText(this, "The Location edit function requires permission to work", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    private void updateLocation() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    latitude.setText("123 456");
+                    longitude.setText("987 654");
+                    address.setText("4400 University Drive, Fairfax, VA 22003");
+                    // latitude.setText(String.valueOf(location.getLatitude()));
+                    // longitude.setText(String.valueOf(location.getLongitude()));
+                }
+            });
+        }
+        else {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_FINE_LOCATION);
+        }
     }
 
     private void stopLocationUpdates() {
@@ -74,49 +108,5 @@ public class LocationPage extends AppCompatActivity {
         longitude.setText("Not available");
         address.setText("Not available");
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-    }
-
-    @SuppressLint("MissingPermission")
-    private void startLocationUpdates() {
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-        updateGPS();
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch(requestCode) {
-            case PERMISSION_FINE_LOCATION:
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                updateGPS();
-            }
-            else {
-                Toast.makeText(this, "The Location edit function requires permission to work", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-            break;
-        }
-    }
-
-    private void updateGPS() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    updateLocation(location);
-                }
-            });
-        }
-        else {
-                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_FINE_LOCATION);
-        }
-    }
-
-    private void updateLocation(Location location) {
-        latitude.setText("123 456");
-        longitude.setText("987 654");
-        address.setText("4400 University Drive, Fairfax, VA 22003");
-        //        latitude.setText(String.valueOf(location.getLatitude()));
-//        longitude.setText(String.valueOf(location.getLongitude()));
     }
 }
