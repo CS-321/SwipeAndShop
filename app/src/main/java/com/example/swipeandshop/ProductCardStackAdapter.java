@@ -7,10 +7,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.yuyakaido.android.cardstackview.CardStackView;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ProductCardStackAdapter extends RecyclerView.Adapter<ProductCardStackAdapter.ViewHolder> {
@@ -48,6 +51,18 @@ public class ProductCardStackAdapter extends RecyclerView.Adapter<ProductCardSta
             name = itemView.findViewById(R.id.item_name);
             desc = itemView.findViewById(R.id.item_desc);
             price = itemView.findViewById(R.id.item_price);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Product product = items.get(getAdapterPosition());
+                    //open up new set up.
+                    CardStackView cardStackView = v.findViewById(R.id.card_stacked_view);
+                    //ConstraintLayout constraintLayout = v.find
+                    ConstraintSet constraintSet = new ConstraintSet();
+                    //constraintSe
+                }
+            });
+
         }
 
         void setData(Product data) {
@@ -57,8 +72,8 @@ public class ProductCardStackAdapter extends RecyclerView.Adapter<ProductCardSta
                     .centerCrop()
                     .into(image);
             name.setText(data.getName());
-            desc.setText(data.getDescription());
-            //price.setText(data.getPrice());
+            desc.setText(data.getShortDescription());
+            price.setText(Float.toString(data.getPrice()));
         }
     }
 
@@ -70,3 +85,4 @@ public class ProductCardStackAdapter extends RecyclerView.Adapter<ProductCardSta
         this.items = items;
     }
 }
+

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 
@@ -35,6 +36,7 @@ import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -47,8 +49,12 @@ public class FeedPage extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseDatabase database;
     DatabaseReference allProductRef;
+    DatabaseReference userRef;
     FirebaseUser user;
     List<Product> products;
+    HashMap<String, Product> likedProducts;
+    HashMap<String, Product> dislikedProducts;
+    Product currentProduct;
 
 
     @Override
@@ -60,7 +66,12 @@ public class FeedPage extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         user = firebaseAuth.getCurrentUser();
         allProductRef = database.getReference().child("products");
+        userRef = database.getReference().child("users").child(user.getUid());
+
+        currentProduct = null;
         products = new ArrayList<>();
+        likedProducts = new HashMap<>();
+        dislikedProducts = new HashMap<>();
 
         //Loads in data to adapter from firebase.
         loadData();
@@ -82,17 +93,37 @@ public class FeedPage extends AppCompatActivity {
     }
 
     private List<Product> addList() {
-        //products.add(new Product("Item 1", "This is a desc.", "the seller", 10.5f, "https://firebasestorage.googleapis.com/v0/b/swipeandshop-8168d.appspot.com/o/1619581076067.png?alt=media&token=adaeed50-aab3-4f38-a4b1-e27346bf52cd","myid"));
-        //products.add(new Product("Item 1", "This is a desc.", "the seller", 10.5f, "https://i.imgur.com/UYrdDFI.jpeg","myid"));
         return products;
     }
 
-    /**Retrieves data from firebase when page is first loaded.*/
+    /**Retrieves data from firebase when page is first loaded
+     * and sets listener for when data is chhanged.*/
     public void loadData(){
-        //Get viewed products by a person so they dont view them again.
+        //Get viewed products by a person so they don't view them again.
+        //Called everytime a product is added or removed from the db.
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Get all liked products from the database.
+                for(DataSnapshot item_snapshot:snapshot.child("likedProducts").getChildren()){
+                    Product tempProduct = item_snapshot.getValue(Product.class);
+                    likedProducts.put(tempProduct.productId, tempProduct);
+                }
 
-        //Also randomize the data order.
+                for(DataSnapshot item_snapshot:snapshot.child("dislikedProducts").getChildren()){
+                    Product tempProduct = item_snapshot.getValue(Product.class);
+                    dislikedProducts.put(tempProduct.productId, tempProduct);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         // this will load data from firebase and put it into the products list.
+        //Called everytime a product is added or removed from the db.
         allProductRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -117,10 +148,11 @@ public class FeedPage extends AppCompatActivity {
     /**Sets adapter info for the swiping cards.*/
     private void setAdapterInfo(){
         CardStackView cardStackView = findViewById(R.id.card_stacked_view);
+
         manager = new CardStackLayoutManager(FeedPage.this, new CardStackListener() {
             @Override
             public void onCardDragging(Direction direction, float ratio) {
-                Log.d(TAG, "onCardDragging: d=" + direction.name() + " ratio=" + ratio);
+                //Log.d(TAG, "onCardDragging: d=" + direction.name() + " ratio=" + ratio);
             }
 
             @Override
@@ -128,12 +160,14 @@ public class FeedPage extends AppCompatActivity {
                 Log.d(TAG, "onCardSwiped: p=" + manager.getTopPosition() + " d=" + direction);
                 if (direction == Direction.Right){
                     Toast.makeText(FeedPage.this, "Direction Right", Toast.LENGTH_SHORT).show();
+                    cardSwipedRight(); //do stuff for when product is swiped right
                 }
                 if (direction == Direction.Top){
                     Toast.makeText(FeedPage.this, "Direction Top", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == Direction.Left){
                     Toast.makeText(FeedPage.this, "Direction Left", Toast.LENGTH_SHORT).show();
+                    cardSwipedLeft(); //do stuff for when product is swiped left
                 }
                 if (direction == Direction.Bottom){
                     Toast.makeText(FeedPage.this, "Direction Bottom", Toast.LENGTH_SHORT).show();
@@ -158,14 +192,16 @@ public class FeedPage extends AppCompatActivity {
 
             @Override
             public void onCardAppeared(View view, int position) {
+                //set product when it first loads up
                 TextView tv = view.findViewById(R.id.item_name);
-                Log.d(TAG, "onCardAppeared: " + position + ", nama: " + tv.getText());
+                Log.d(TAG, "onCardAppeared: " + position + ", name: " + tv.getText());
+                currentProduct = products.get(position);
             }
 
             @Override
             public void onCardDisappeared(View view, int position) {
                 TextView tv = view.findViewById(R.id.item_name);
-                Log.d(TAG, "onCardAppeared: " + position + ", nama: " + tv.getText());
+                Log.d(TAG, "onCardAppeared: " + position + ", name: " + tv.getText());
             }
         });
         manager.setStackFrom(StackFrom.None);
@@ -174,15 +210,30 @@ public class FeedPage extends AppCompatActivity {
         manager.setScaleInterval(0.95f);
         manager.setSwipeThreshold(0.3f);
         manager.setMaxDegree(20.0f);
-        manager.setDirections(Direction.FREEDOM);
+        manager.setDirections(Direction.HORIZONTAL); //Change to HORIZONTAL if only swiping left/right
         manager.setCanScrollHorizontal(true);
         manager.setSwipeableMethod(SwipeableMethod.Manual);
         manager.setOverlayInterpolator(new LinearInterpolator());
         adapter = new ProductCardStackAdapter(addList());
-        System.out.println(products.size() + " my siize 2");
         cardStackView.setLayoutManager(manager);
         cardStackView.setAdapter(adapter);
         cardStackView.setItemAnimator(new DefaultItemAnimator());
+
+    }
+
+    private void cardSwipedRight(){
+        if(currentProduct != null){
+            likedProducts.put(currentProduct.productId,currentProduct);
+            userRef.child("likedProducts").child(currentProduct.productId).setValue(currentProduct);
+        }
+    }
+
+    private void cardSwipedLeft(){
+        if(currentProduct != null){
+            dislikedProducts.put(currentProduct.productId,currentProduct);
+            userRef.child("dislikedProducts").child(currentProduct.productId).setValue(currentProduct);
+        }
+
     }
 
 

@@ -59,12 +59,12 @@ public class ProductPage extends AppCompatActivity {
 
     int currentLocation = -1;
     String currentUrl = "";
+    String currentImagePath = "";
 
     // Buttons
     Button addProductBtn;
     Button cancelProductBtn;
     Button saveProductBtn;
-    Button addImageBtn;
 
     // Firebase references.
     FirebaseAuth firebaseAuth;
@@ -109,7 +109,6 @@ public class ProductPage extends AppCompatActivity {
         // Product page objects.
         productCardList = findViewById(R.id.dataList); //holds all the users products
         addProductBtn = findViewById(R.id.addProductBtn);
-        addImageBtn = findViewById(R.id.addImageBtn);
         productActivity = (Activity)this;
         products = new ArrayList<>();
 
@@ -164,9 +163,13 @@ public class ProductPage extends AppCompatActivity {
     public void addOnClick(){
         createProductView.setVisibility(View.VISIBLE);
         EditText name = createProductView.findViewById(R.id.nameInput);
-        EditText desc = createProductView.findViewById(R.id.descriptionInput);
+        EditText shortDesc = createProductView.findViewById(R.id.descriptionInput);
+        EditText longDesc = createProductView.findViewById(R.id.descriptionInput2);
+        EditText price = createProductView.findViewById(R.id.priceInput);
         name.setText("");//clear text boxes
-        desc.setText("");
+        shortDesc.setText("");
+        longDesc.setText("");
+        price.setText("");
         addProductBtn.setVisibility(View.GONE);
     }
 
@@ -174,6 +177,7 @@ public class ProductPage extends AppCompatActivity {
     public void cancelOnClick(){
         createProductView.setVisibility(View.GONE);
         addProductBtn.setVisibility(View.VISIBLE);
+        imageView.setImageResource(R.drawable.googleg_disabled_color_18);
         this.currentLocation = -1;
     }
 
@@ -181,7 +185,9 @@ public class ProductPage extends AppCompatActivity {
     public void saveOnClick(){
         Product product;
         EditText name = createProductView.findViewById(R.id.nameInput);
-        EditText desc = createProductView.findViewById(R.id.descriptionInput); //LET IN
+        EditText shortDesc = createProductView.findViewById(R.id.descriptionInput);
+        EditText longDesc = createProductView.findViewById(R.id.descriptionInput2);
+        EditText price = createProductView.findViewById(R.id.priceInput);
 
         //Add product to Realtime database
         user = firebaseAuth.getCurrentUser();
@@ -192,8 +198,21 @@ public class ProductPage extends AppCompatActivity {
             product = products.remove(currentLocation);
             if(currentUrl.length() == 0){
                 currentUrl = product.getImageUrl();
+                currentImagePath = product.getImagePath();
             }
-            product = new Product(name.getText().toString(),desc.getText().toString(), "Javi", 10.90f, currentUrl,product.productId);
+            product = new Product();
+
+            /*Add data to product.*/
+            product.setName(name.getText().toString());
+            product.setShortDescription(shortDesc.getText().toString());
+            product.setLongDescription(longDesc.getText().toString());
+            product.setPrice(Float.parseFloat(price.getText().toString()));
+            product.setProductId(product.getProductId());
+            product.setSellerId(user.getUid());
+            product.setSeller("Seller Username");
+            product.setImageUrl(currentUrl);
+            product.setImagePath(currentImagePath);
+
             products.add(0,product);
             myRef.child(product.productId).setValue(product);
             allProductRef.child(product.productId).setValue(product);
@@ -203,7 +222,19 @@ public class ProductPage extends AppCompatActivity {
                 return;
             }
             DatabaseReference newRef = myRef.push();
-            product = new Product(name.getText().toString(),desc.getText().toString(), "Javi", 10.90f, currentUrl,newRef.getKey());
+            product = new Product();
+
+            /*Add data to product.*/
+            product.setName(name.getText().toString());
+            product.setShortDescription(shortDesc.getText().toString());
+            product.setLongDescription(longDesc.getText().toString());
+            product.setPrice(Float.parseFloat(price.getText().toString()));
+            product.setSellerId(user.getUid());
+            product.setSeller("Seller Username");
+            product.setImageUrl(currentUrl);
+            product.setProductId(newRef.getKey());
+            product.setImagePath(currentImagePath);
+
             products.add(product); // add our new product to the list
             newRef.setValue(product);
             allProductRef.child(product.productId).setValue(product);
@@ -217,6 +248,7 @@ public class ProductPage extends AppCompatActivity {
         imageView.setImageResource(R.drawable.googleg_disabled_color_18);
         this.currentLocation = -1;
         this.currentUrl = "";
+        this.currentImagePath = "";
         // updating the grid view to include the new product
         productCardList.setAdapter(myAdapter);
     }
@@ -300,10 +332,16 @@ public class ProductPage extends AppCompatActivity {
 
         // get the product that was clicked on.
         Product product = products.get(productIndex);
+        ImageView myImage = view.findViewById(R.id.imageView);
+        Picasso.get()
+                .load(product.getImageUrl())
+                .fit()
+                .centerCrop()
+                .into(myImage);
 
         // populate those text boxes.
         name.setText(product.getName());
-        description.setText(product.getDescription());
+        description.setText(product.getShortDescription());
 
         // set the current location of the product in the products list to be used for later.
         this.currentLocation = productIndex;
@@ -312,11 +350,9 @@ public class ProductPage extends AppCompatActivity {
     public void removeProduct(int position){
         // removed product from products list and store in a temp var.
         Product tempProduct = products.remove(position);
-        //remove image associated with product
-        //removeFromFirebase(tempProduct.getImageUrl());
-        // remove product using product id.
         myRef.child(tempProduct.productId).removeValue();
         allProductRef.child(tempProduct.productId).removeValue();
+        removeFromFirebase(tempProduct.getImagePath());
         // update the adapter.
         productCardList.setAdapter(myAdapter);
     }
@@ -355,19 +391,6 @@ public class ProductPage extends AppCompatActivity {
             }
         });
 
-        addImageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (imageUri != null){
-                    Toast.makeText(ProductPage.this, "You have selected an image", Toast.LENGTH_SHORT).show();
-                    uploadToFirebase(imageUri);
-                }else{
-                    Toast.makeText(ProductPage.this, "Please Select Image", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
     }
 
     @Override
@@ -377,12 +400,18 @@ public class ProductPage extends AppCompatActivity {
         if (requestCode ==2 && resultCode == RESULT_OK && data != null){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
+            if (imageUri != null){
+                Toast.makeText(ProductPage.this, "You have selected an image", Toast.LENGTH_SHORT).show();
+                uploadToFirebase(imageUri);
+            }else{
+                Toast.makeText(ProductPage.this, "Please Select Image", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     private void uploadToFirebase(Uri uri){
-
-        final StorageReference fileRef = storageRef.child(System.currentTimeMillis() + "." + getFileExtension(uri));
+        String imagePath = System.currentTimeMillis() + "." + getFileExtension(uri);
+        final StorageReference fileRef = storageRef.child(imagePath);
         fileRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -391,6 +420,7 @@ public class ProductPage extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         // store url to be used later.
                         currentUrl = uri.toString();
+                        currentImagePath = imagePath;
                         Toast.makeText(ProductPage.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
                         imageUri = null;
                     }
@@ -419,11 +449,11 @@ public class ProductPage extends AppCompatActivity {
     }
 
     /**Remove image from firebase.*/
-    private void removeFromFirebase(String url){
-        if(url.length() == 0){
+    private void removeFromFirebase(String path){
+        if(path.length() == 0){
             return;
         }
-        StorageReference delRef = storageRef.child(url);
+        StorageReference delRef = storageRef.child(path);
         // Delete the file
         delRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
