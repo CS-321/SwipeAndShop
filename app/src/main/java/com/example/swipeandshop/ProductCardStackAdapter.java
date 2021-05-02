@@ -51,17 +51,6 @@ public class ProductCardStackAdapter extends RecyclerView.Adapter<ProductCardSta
             name = itemView.findViewById(R.id.item_name);
             desc = itemView.findViewById(R.id.item_desc);
             price = itemView.findViewById(R.id.item_price);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Product product = items.get(getAdapterPosition());
-                    //open up new set up.
-                    CardStackView cardStackView = v.findViewById(R.id.card_stacked_view);
-                    //ConstraintLayout constraintLayout = v.find
-                    ConstraintSet constraintSet = new ConstraintSet();
-                    //constraintSe
-                }
-            });
 
         }
 
@@ -84,5 +73,6 @@ public class ProductCardStackAdapter extends RecyclerView.Adapter<ProductCardSta
     public void setItems(List<Product> items) {
         this.items = items;
     }
+
 }
 

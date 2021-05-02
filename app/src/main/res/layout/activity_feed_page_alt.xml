@@ -2,50 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/myLayout"
+    android:id="@+id/myLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FeedPage">
 
-    <TextView
-        android:id="@+id/textFeedTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="180dp"
-        android:layout_marginLeft="180dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="173dp"
-        android:layout_marginRight="173dp"
-        android:text="Feed"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.yuyakaido.android.cardstackview.CardStackView
-        android:id="@+id/card_stacked_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="64dp"
-        android:clipToPadding="false"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ScrollView
         android:id="@+id/scrollview_id"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="411dp"
-        android:layout_marginBottom="731dp"
-        android:visibility="gone"
+        android:layout_width="376dp"
+        android:layout_height="399dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/card_stacked_view">
 
         <LinearLayout
+            android:id="@+id/layout_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -71,9 +46,33 @@
             <TextView
                 android:id="@+id/price_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="127dp"
                 android:text="TextView" />
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/textFeedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="180dp"
+        android:layout_marginLeft="180dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="173dp"
+        android:layout_marginRight="173dp"
+        android:text="Feed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.yuyakaido.android.cardstackview.CardStackView
+        android:id="@+id/card_stacked_view"
+        android:layout_width="411dp"
+        android:layout_height="332dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

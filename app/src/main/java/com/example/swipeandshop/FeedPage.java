@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 
@@ -35,6 +38,8 @@ import com.yuyakaido.android.cardstackview.Direction;
 import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +61,13 @@ public class FeedPage extends AppCompatActivity {
     HashMap<String, Product> dislikedProducts;
     Product currentProduct;
 
+    // For more info.
+    ConstraintLayout constraintLayout;
+    ConstraintSet constraintSetOld = new ConstraintSet();
+    ConstraintSet constraintSetNew = new ConstraintSet();
+    boolean isClicked = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +86,10 @@ public class FeedPage extends AppCompatActivity {
         dislikedProducts = new HashMap<>();
 
         //Loads in data to adapter from firebase.
+        constraintLayout = findViewById(R.id.myLayout);
+        constraintSetOld.clone(constraintLayout);
+        constraintSetNew.clone(this, R.layout.activity_feed_page_alt);
+
         loadData();
     }
 
@@ -196,6 +212,16 @@ public class FeedPage extends AppCompatActivity {
                 TextView tv = view.findViewById(R.id.item_name);
                 Log.d(TAG, "onCardAppeared: " + position + ", name: " + tv.getText());
                 currentProduct = products.get(position);
+                CardView cardView = findViewById(R.id.cardid);
+                cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //open up new set up.
+                        System.out.println("TRY ME");
+
+                        swapView(v);
+                    }
+                });
             }
 
             @Override
@@ -232,6 +258,47 @@ public class FeedPage extends AppCompatActivity {
         if(currentProduct != null){
             dislikedProducts.put(currentProduct.productId,currentProduct);
             userRef.child("dislikedProducts").child(currentProduct.productId).setValue(currentProduct);
+        }
+
+
+
+    }
+
+    public void swapView(View v){
+        TransitionManager.beginDelayedTransition(constraintLayout);
+        TextView card_price = v.findViewById(R.id.item_price);
+        TextView card_desc = v.findViewById(R.id.item_desc);
+        TextView card_name = v.findViewById(R.id.item_name);
+
+        if(currentProduct != null){
+            if(!isClicked){
+                constraintSetNew.applyTo(constraintLayout);
+                TextView seller_text = findViewById(R.id.seller_text);
+                TextView name_text = findViewById(R.id.name_text);
+                TextView price_text = findViewById(R.id.price_text);
+                TextView description_text = findViewById(R.id.description_text);
+
+                card_price.setVisibility(View.INVISIBLE);
+                card_desc.setVisibility(View.INVISIBLE);
+                card_name.setVisibility(View.INVISIBLE);
+
+                seller_text.setText("Seller:" + currentProduct.getSeller());
+                name_text.setText("Name:" + currentProduct.getName());
+                price_text.setText("Price:" + Float.toString(currentProduct.getPrice()));
+                description_text.setText("Description:" + currentProduct.getLongDescription());
+
+                manager.setCanScrollHorizontal(false);
+                manager.setCanScrollVertical(false);
+                isClicked = true;
+            }else{
+                card_price.setVisibility(View.VISIBLE);
+                card_desc.setVisibility(View.VISIBLE);
+                card_name.setVisibility(View.VISIBLE);
+                constraintSetOld.applyTo(constraintLayout);
+                manager.setCanScrollHorizontal(true);
+                manager.setCanScrollVertical(true);
+                isClicked = false;
+            }
         }
 
     }

@@ -200,19 +200,19 @@ public class ProductPage extends AppCompatActivity {
                 currentUrl = product.getImageUrl();
                 currentImagePath = product.getImagePath();
             }
-            product = new Product();
 
             /*Add data to product.*/
             product.setName(name.getText().toString());
             product.setShortDescription(shortDesc.getText().toString());
             product.setLongDescription(longDesc.getText().toString());
-            product.setPrice(Float.parseFloat(price.getText().toString()));
+            if(price.getText().length() > 0){
+                product.setPrice(Float.parseFloat(price.getText().toString()));
+            }
             product.setProductId(product.getProductId());
             product.setSellerId(user.getUid());
             product.setSeller("Seller Username");
             product.setImageUrl(currentUrl);
             product.setImagePath(currentImagePath);
-
             products.add(0,product);
             myRef.child(product.productId).setValue(product);
             allProductRef.child(product.productId).setValue(product);
@@ -228,7 +228,9 @@ public class ProductPage extends AppCompatActivity {
             product.setName(name.getText().toString());
             product.setShortDescription(shortDesc.getText().toString());
             product.setLongDescription(longDesc.getText().toString());
-            product.setPrice(Float.parseFloat(price.getText().toString()));
+            if(price.getText().length() > 0){
+                product.setPrice(Float.parseFloat(price.getText().toString()));
+            }
             product.setSellerId(user.getUid());
             product.setSeller("Seller Username");
             product.setImageUrl(currentUrl);
