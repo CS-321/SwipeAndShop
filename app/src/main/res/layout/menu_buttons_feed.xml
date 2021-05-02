@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="800dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <ImageButton
+            android:id="@+id/settings"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="352dp"
+            android:layout_marginTop="715dp"
+            android:background="#00FFFFFF"
+            android:contentDescription="go to Settings"
+            android:onClick="openSettings"
+            android:scaleType="fitXY"
+            android:src="@drawable/settings_icon"
+            android:visibility="visible"/>
+
+        <ImageButton
+            android:id="@+id/chat"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="715dp"
+            android:background="#00FFFFFF"
+            android:contentDescription="go to Chat"
+            android:onClick="openChat"
+            android:scaleType="fitXY"
+            android:src="@drawable/chat_icon"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/feed"
+            android:layout_width="65dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="145dp"
+            android:layout_marginTop="705dp"
+            android:contentDescription="go to Feed page"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/bag2"
+            android:backgroundTint="@color/white"
+            android:visibility="visible"/>
+
+        <ImageButton
+            android:id="@+id/upload"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="205dp"
+            android:layout_marginTop="705dp"
+            android:contentDescription="go to Product page"
+            android:scaleType="fitXY"
+            android:onClick="openUpload"
+            app:srcCompat="@drawable/upload_icon"
+            android:backgroundTint="@color/white"
+            android:visibility="visible"/>
+</RelativeLayout>
