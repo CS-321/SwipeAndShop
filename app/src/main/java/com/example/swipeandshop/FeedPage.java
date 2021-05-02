@@ -303,5 +303,20 @@ public class FeedPage extends AppCompatActivity {
 
     }
 
+    public void openChat(View view) {
+        Intent intent = new Intent(FeedPage.this, ChatPage.class);
+        startActivity(intent);
+    }
+
+    public void openSettings(View view) {
+        Intent intent = new Intent(FeedPage.this, SettingsPage.class);
+        startActivity(intent);
+    }
+
+    public void openUpload(View view) {
+        Intent intent = new Intent(FeedPage.this, ProductPage.class);
+        startActivity(intent);
+    }
+
 
 }

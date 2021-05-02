@@ -32,4 +32,19 @@ public class ChatPage extends AppCompatActivity {
         return true;
     }
 
+    public void openSettings(View view) {
+        Intent intent = new Intent(ChatPage.this, SettingsPage.class);
+        startActivity(intent);
+    }
+
+    public void openFeed(View view) {
+        Intent intent = new Intent(ChatPage.this, FeedPage.class);
+        startActivity(intent);
+    }
+
+    public void openUpload(View view) {
+        Intent intent = new Intent(ChatPage.this, ProductPage.class);
+        startActivity(intent);
+    }
+
 }
