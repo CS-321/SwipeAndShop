@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".FeedPage">
 
-    <include
-        layout="@layout/menu_buttons_feed"/>
 
     <TextView
         android:id="@+id/textFeedTitle"
@@ -24,20 +22,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <com.yuyakaido.android.cardstackview.CardStackView
         android:id="@+id/card_stacked_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="84dp"
         android:clipToPadding="false"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        layout="@layout/menu_buttons_feed"/>
 
     <ScrollView
         android:id="@+id/scrollview_id"
@@ -80,6 +76,19 @@
                 android:layout_height="wrap_content"
                 android:text="TextView" />
         </LinearLayout>
+
     </ScrollView>
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/menu_buttons_feed"
+        android:layout_width="425dp"
+        android:layout_height="784dp"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,5 +21,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        layout="@layout/menu_buttons_chat"/>
+        layout="@layout/menu_buttons_chat"
+        android:layout_width="451dp"
+        android:layout_height="1077dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
