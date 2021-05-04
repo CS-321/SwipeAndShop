@@ -13,7 +13,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
+import android.text.Editable;
 import android.text.Layout;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +25,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -30,6 +33,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -142,6 +146,53 @@ public class ProductPage extends AppCompatActivity {
         showData();
         //set listeners.
         setButtonListeners();
+
+        // Register input validation
+        EditText priceInput = findViewById(R.id.priceInput);
+        priceInput.addTextChangedListener(new TextValidator(priceInput) {
+            @Override public void validate(TextView textView, String text) {
+                float f;
+                try {
+                    f = Float.parseFloat(text);
+                } catch (Exception e) {
+                    textView.setError("Price must be in $0.1..$10,000 range");
+                    return;
+                }
+                if (f < 0.1 || f > 10000.)
+                    textView.setError("Price must be in $0.1..$10,000 range");
+            }
+        });
+
+        EditText nameInput = findViewById(R.id.nameInput);
+        nameInput.addTextChangedListener(new TextValidator(nameInput) {
+            @Override public void validate(TextView textView, String text) {
+                if (text == null || text.isEmpty() || text.length() < 5 || text.length() > 14 ) {
+                    textView.setError("Name must be no more than 5 and less than 14 characters long");
+                }
+            }
+        });
+
+        EditText descriptionInput = findViewById(R.id.descriptionInput);
+        descriptionInput.addTextChangedListener(new TextValidator(descriptionInput) {
+            @Override public void validate(TextView textView, String text) {
+                String patt = "\r\n|\r|\n";
+                if (text == null || text.isEmpty() || text.length() < 10 || text.length() > 40 ||
+                text.split(patt).length < 1 || text.split(patt).length > 2 ) {
+                    textView.setError("Short description must be 10..40 characters long and 2 lines max");
+                }
+            }
+        });
+
+        EditText descriptionInput2 = findViewById(R.id.descriptionInput2);
+        descriptionInput2.addTextChangedListener(new TextValidator(descriptionInput2) {
+            @Override public void validate(TextView textView, String text) {
+                String patt = "\r\n|\r|\n";
+                if (text == null || text.isEmpty() || text.length() < 20 || text.length() > 500 ||
+                        text.split(patt).length < 1 || text.split(patt).length > 20 ) {
+                    textView.setError("Long description must be 20..500 characters long and 20 lines max");
+                }
+            }
+        });
     }
 
     @Override
@@ -468,5 +519,27 @@ public class ProductPage extends AppCompatActivity {
                 // Uh-oh, an error occurred!
             }
         });
+    }
+
+    public abstract class TextValidator implements TextWatcher {
+        private final TextView textView;
+
+        public TextValidator(TextView textView) {
+            this.textView = textView;
+        }
+
+        public abstract void validate(TextView textView, String text);
+
+        @Override
+        final public void afterTextChanged(Editable s) {
+            String text = textView.getText().toString();
+            validate(textView, text);
+        }
+
+        @Override
+        final public void beforeTextChanged(CharSequence s, int start, int count, int after) { /* Don't care */ }
+
+        @Override
+        final public void onTextChanged(CharSequence s, int start, int before, int count) { /* Don't care */ }
     }
 }
