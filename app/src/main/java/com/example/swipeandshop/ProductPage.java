@@ -12,9 +12,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,13 +28,10 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.SnapshotParser;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,9 +44,7 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ProductPage extends AppCompatActivity {
     List<Product> products;
@@ -216,7 +209,7 @@ public class ProductPage extends AppCompatActivity {
         EditText name = createProductView.findViewById(R.id.nameInput);
         EditText shortDesc = createProductView.findViewById(R.id.descriptionInput);
         EditText longDesc = createProductView.findViewById(R.id.descriptionInput2);
-        EditText price = createProductView.findViewById(R.id.priceInput);
+        EditText price = createProductView.findViewById(R.id.nameInput);
         name.setText("");//clear text boxes
         shortDesc.setText("");
         longDesc.setText("");

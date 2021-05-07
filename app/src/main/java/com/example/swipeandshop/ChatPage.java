@@ -43,8 +43,8 @@ public class ChatPage extends AppCompatActivity {
             finish();
             return;
         }
-        database = FirebaseDatabase.getInstance();
-        chatRef = database.getReference().child("chats");
+        //database = FirebaseDatabase.getInstance();
+        //chatRef = database.getReference().child("chats");
         /*options =
                 new FirebaseRecyclerOptions.Builder<ChatMessage>()
                         .setQuery(chatRef,ChatMessage.class).build();

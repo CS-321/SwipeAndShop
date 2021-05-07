@@ -40,6 +40,7 @@ import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,8 +48,10 @@ import java.util.List;
 
 public class FeedPage extends AppCompatActivity {
     private static final String TAG = "FeedPage";
+    private static DecimalFormat df = new DecimalFormat("0.00");
     private CardStackLayoutManager manager;
     private ProductCardStackAdapter adapter;
+
 
     // Firebase references.
     FirebaseAuth firebaseAuth;
@@ -217,7 +220,6 @@ public class FeedPage extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //open up new set up.
-                        System.out.println("TRY ME");
 
                         swapView(v);
                     }
@@ -284,7 +286,7 @@ public class FeedPage extends AppCompatActivity {
 
                 seller_text.setText("Seller:" + currentProduct.getSeller());
                 name_text.setText("Name:" + currentProduct.getName());
-                price_text.setText("Price:" + Float.toString(currentProduct.getPrice()));
+                price_text.setText("Price:$" + df.format(currentProduct.getPrice()));
                 description_text.setText("Description:" + currentProduct.getLongDescription());
 
                 manager.setCanScrollHorizontal(false);

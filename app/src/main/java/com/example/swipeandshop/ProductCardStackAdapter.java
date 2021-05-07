@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.yuyakaido.android.cardstackview.CardStackView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ProductCardStackAdapter extends RecyclerView.Adapter<ProductCardStackAdapter.ViewHolder> {
 
     private List<Product> items;
+    private static DecimalFormat df = new DecimalFormat("0.00");
 
     public ProductCardStackAdapter(List<Product> items) {
         this.items = items;
@@ -62,7 +64,7 @@ public class ProductCardStackAdapter extends RecyclerView.Adapter<ProductCardSta
                     .into(image);
             name.setText(data.getName());
             desc.setText(data.getShortDescription());
-            price.setText(Float.toString(data.getPrice()));
+            price.setText("$" + df.format(data.getPrice()));
         }
     }
 
