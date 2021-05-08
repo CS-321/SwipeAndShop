@@ -85,7 +85,7 @@ public class FeedPage extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         allProductRef = database.getReference().child("products");
         userRef = database.getReference().child("users").child(user.getUid());
-        chatRef = database.getReference().child("chats");
+        chatRef = database.getReference().child("users").child(user.getUid()).child("chats");
 
         currentProduct = null;
         products = new ArrayList<>();
@@ -174,8 +174,8 @@ public class FeedPage extends AppCompatActivity {
                 chats.clear();
                 for(DataSnapshot item_snapshot:snapshot.getChildren()){
                     System.out.println(snapshot.getValue().toString());
-                    Chat tempProduct = item_snapshot.getValue(Chat.class);
-                    chats.put(tempProduct.getChatId() ,tempProduct);
+                    Chat tempChat = item_snapshot.getValue(Chat.class);
+                    chats.put(tempChat.getChatId() ,tempChat);
                 }
             }
 
@@ -274,11 +274,16 @@ public class FeedPage extends AppCompatActivity {
         if(currentProduct != null){
             likedProducts.put(currentProduct.productId,currentProduct);
             String chatId = currentProduct.getSellerId() + user.getUid().toString();
+            String chatId2 = user.getUid().toString() + currentProduct.getSellerId();
             userRef.child("likedProducts").child(currentProduct.productId).setValue(currentProduct);
             if(!chats.containsKey(chatId)){
+                DatabaseReference sellerRef = database.getReference().child("users").child(currentProduct.getSellerId());
                 System.out.println("This chat does not exist.");
-                Chat newChat = new Chat(chatId, new ArrayList<ChatMessage>());
+                Chat newChat = new Chat(chatId, chatId2, currentProduct.getSellerId(),currentProduct.getSeller() + " Chat",new HashMap<>());
+                Chat newChatSeller = new Chat(chatId2,chatId, user.getUid(),user.getEmail() + " Chat",new HashMap<>());
                 chatRef.child(chatId).setValue(newChat);
+                //userRef.child("chats").child(chatId).setValue(newChat);
+                sellerRef.child("chats").child(chatId2).setValue(newChatSeller);
             }
         }
     }

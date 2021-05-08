@@ -209,7 +209,7 @@ public class ProductPage extends AppCompatActivity {
         EditText name = createProductView.findViewById(R.id.nameInput);
         EditText shortDesc = createProductView.findViewById(R.id.descriptionInput);
         EditText longDesc = createProductView.findViewById(R.id.descriptionInput2);
-        EditText price = createProductView.findViewById(R.id.nameInput);
+        EditText price = createProductView.findViewById(R.id.priceInput);
         name.setText("");//clear text boxes
         shortDesc.setText("");
         longDesc.setText("");
@@ -254,7 +254,7 @@ public class ProductPage extends AppCompatActivity {
             }
             product.setProductId(product.getProductId());
             product.setSellerId(user.getUid());
-            product.setSeller("Seller Username");
+            product.setSeller(user.getEmail());
             product.setImageUrl(currentUrl);
             product.setImagePath(currentImagePath);
             products.add(0,product);
@@ -276,7 +276,7 @@ public class ProductPage extends AppCompatActivity {
                 product.setPrice(Float.parseFloat(price.getText().toString()));
             }
             product.setSellerId(user.getUid());
-            product.setSeller("Seller Username");
+            product.setSeller(user.getEmail());
             product.setImageUrl(currentUrl);
             product.setProductId(newRef.getKey());
             product.setImagePath(currentImagePath);

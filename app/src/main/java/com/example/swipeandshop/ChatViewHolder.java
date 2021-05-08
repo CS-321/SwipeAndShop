@@ -22,7 +22,7 @@ public class ChatViewHolder extends RecyclerView.ViewHolder{
 
             @Override
             public void onClick(View view){
-                //callback.itemWasClicked(getAdapterPosition());
+                callback.itemWasClicked(getAdapterPosition());
             }
         });
     }
