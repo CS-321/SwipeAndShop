@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -26,11 +28,16 @@ import java.util.List;
 public class ChatPage extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     FirebaseRecyclerAdapter<ChatMessage, ChatMessageViewHolder> myAdapter;
+    FirebaseRecyclerAdapter<Chat, ChatViewHolder> chatAdapter;
     FirebaseRecyclerOptions<ChatMessage> options;
+    FirebaseRecyclerOptions<Chat> chatOptions;
     List<ChatMessage> chatMessages;
     List<Chat> chats;
     DatabaseReference chatRef;
     FirebaseDatabase database;
+    Button closeChatBtn;
+    Button sendMessageBtn;
+    View chatView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +50,16 @@ public class ChatPage extends AppCompatActivity {
             finish();
             return;
         }
-        //database = FirebaseDatabase.getInstance();
-        //chatRef = database.getReference().child("chats");
+        database = FirebaseDatabase.getInstance();
+        chatRef = database.getReference().child("chats");
         /*options =
                 new FirebaseRecyclerOptions.Builder<ChatMessage>()
-                        .setQuery(chatRef,ChatMessage.class).build();
-        showData();*/
-
+                        .setQuery(chatRef,ChatMessage.class).build();*/
+        chatOptions =
+                new FirebaseRecyclerOptions.Builder<Chat>()
+                        .setQuery(chatRef,Chat.class).build();
+        showData();
+        setButtonListeners();
     }
 
     @Override
@@ -74,6 +84,22 @@ public class ChatPage extends AppCompatActivity {
     }
 
     public void showData() {
+
+        chatAdapter = new FirebaseRecyclerAdapter<Chat, ChatViewHolder>(chatOptions) {
+
+            @NonNull
+            @Override
+            public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message,parent,false);
+                return new ChatViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull ChatViewHolder chatViewHolder, int i, @NonNull Chat chat) {
+
+            }
+        };
         // This takes the loaded data from firebase and puts it into the adapter.
         myAdapter = new FirebaseRecyclerAdapter<ChatMessage, ChatMessageViewHolder>(options) {
             @NonNull
@@ -100,6 +126,9 @@ public class ChatPage extends AppCompatActivity {
                 for(DataSnapshot item_snapshot:snapshot.getChildren()){
                     //Product tempProduct = item_snapshot.getValue(Chat.class);
                     // make sure user hasn't already swiped on this object.
+                    System.out.println(snapshot.getValue().toString());
+                    Chat tempChat = item_snapshot.getValue(Chat.class);
+                    chats.add(tempChat);
                 }
             }
 
@@ -107,6 +136,30 @@ public class ChatPage extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    public void setButtonListeners(){
+        closeChatBtn = findViewById(R.id.closeChatBtn);
+        sendMessageBtn = findViewById(R.id.sendMessageBtn);
+        chatView = findViewById(R.id.chatCardView);
+        //chatView.setVisibility(View.GONE);
+        closeChatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chatView.setVisibility(View.GONE);
+            }
+        });
+
+        sendMessageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText message = (EditText) findViewById(R.id.messageInputText);
+                String msgText = message.getText().toString();
+                System.out.println(msgText);
 
             }
         });

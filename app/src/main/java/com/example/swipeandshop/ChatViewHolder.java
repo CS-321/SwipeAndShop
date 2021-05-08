@@ -2,25 +2,21 @@ package com.example.swipeandshop;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ChatMessageViewHolder extends RecyclerView.ViewHolder{
-    TextView message;
-    TextView userName;
+public class ChatViewHolder extends RecyclerView.ViewHolder{
+    TextView name;
 
     // Used to load the products view.
-    public ChatMessageViewHolder(@NonNull View itemView) {
+    public ChatViewHolder(@NonNull View itemView) {
         super(itemView);
-        message = itemView.findViewById(R.id.textView);
-        userName = itemView.findViewById(R.id.textView);
+        name = itemView.findViewById(R.id.chatName);
     }
 
     void bindData(ViewHolderCallback callback){
-        Button removeBtn = itemView.findViewById(R.id.removeProductButton);
 
         itemView.setOnClickListener(new View.OnClickListener(){
 

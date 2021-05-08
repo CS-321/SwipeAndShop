@@ -319,6 +319,8 @@ public class ProductPage extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     /**Loads data into teh firebaseUI adapter and displays it in the grid layout.*/

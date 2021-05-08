@@ -22,6 +22,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,10 +59,12 @@ public class FeedPage extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference allProductRef;
     DatabaseReference userRef;
+    DatabaseReference chatRef;
     FirebaseUser user;
     List<Product> products;
     HashMap<String, Product> likedProducts;
     HashMap<String, Product> dislikedProducts;
+    HashMap<String, Chat> chats;
     Product currentProduct;
 
     // For more info.
@@ -82,11 +85,13 @@ public class FeedPage extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         allProductRef = database.getReference().child("products");
         userRef = database.getReference().child("users").child(user.getUid());
+        chatRef = database.getReference().child("chats");
 
         currentProduct = null;
         products = new ArrayList<>();
         likedProducts = new HashMap<>();
         dislikedProducts = new HashMap<>();
+        chats = new HashMap<>();
 
         //Loads in data to adapter from firebase.
         constraintLayout = findViewById(R.id.myLayout);
@@ -162,6 +167,23 @@ public class FeedPage extends AppCompatActivity {
 
             }
         });
+
+        chatRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chats.clear();
+                for(DataSnapshot item_snapshot:snapshot.getChildren()){
+                    System.out.println(snapshot.getValue().toString());
+                    Chat tempProduct = item_snapshot.getValue(Chat.class);
+                    chats.put(tempProduct.getChatId() ,tempProduct);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     /**Sets adapter info for the swiping cards.*/
@@ -220,7 +242,6 @@ public class FeedPage extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //open up new set up.
-
                         swapView(v);
                     }
                 });
@@ -252,7 +273,13 @@ public class FeedPage extends AppCompatActivity {
     private void cardSwipedRight(){
         if(currentProduct != null){
             likedProducts.put(currentProduct.productId,currentProduct);
+            String chatId = currentProduct.getSellerId() + user.getUid().toString();
             userRef.child("likedProducts").child(currentProduct.productId).setValue(currentProduct);
+            if(!chats.containsKey(chatId)){
+                System.out.println("This chat does not exist.");
+                Chat newChat = new Chat(chatId, new ArrayList<ChatMessage>());
+                chatRef.child(chatId).setValue(newChat);
+            }
         }
     }
 
@@ -261,9 +288,6 @@ public class FeedPage extends AppCompatActivity {
             dislikedProducts.put(currentProduct.productId,currentProduct);
             userRef.child("dislikedProducts").child(currentProduct.productId).setValue(currentProduct);
         }
-
-
-
     }
 
     public void swapView(View v){
@@ -284,10 +308,10 @@ public class FeedPage extends AppCompatActivity {
                 card_desc.setVisibility(View.INVISIBLE);
                 card_name.setVisibility(View.INVISIBLE);
 
-                seller_text.setText("Seller:" + currentProduct.getSeller());
-                name_text.setText("Name:" + currentProduct.getName());
-                price_text.setText("Price:$" + df.format(currentProduct.getPrice()));
-                description_text.setText("Description:" + currentProduct.getLongDescription());
+                seller_text.setText(currentProduct.getSeller());
+                name_text.setText(currentProduct.getName());
+                price_text.setText("$" + df.format(currentProduct.getPrice()));
+                description_text.setText(currentProduct.getLongDescription());
 
                 manager.setCanScrollHorizontal(false);
                 manager.setCanScrollVertical(false);

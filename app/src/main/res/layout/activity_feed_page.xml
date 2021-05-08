@@ -25,9 +25,9 @@
 
     <com.yuyakaido.android.cardstackview.CardStackView
         android:id="@+id/card_stacked_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="84dp"
+        android:layout_width="397dp"
+        android:layout_height="666dp"
+        android:layout_marginBottom="60dp"
         android:clipToPadding="false"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
