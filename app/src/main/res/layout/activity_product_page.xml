@@ -78,8 +78,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/createProductView"
-        android:layout_width="392dp"
-        android:layout_height="714dp"
+        android:layout_width="398dp"
+        android:layout_height="721dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -246,18 +246,33 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView"
+            <androidx.cardview.widget.CardView
                 android:layout_width="112dp"
-                android:layout_height="108dp"
-                android:layout_marginTop="78dp"
-                android:layout_marginBottom="24dp"
+                android:layout_height="94dp"
+                android:layout_marginTop="86dp"
+                android:layout_marginBottom="45dp"
                 app:layout_constraintBottom_toTopOf="@+id/nameInput"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/insert_image_here" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="116dp"
+                        android:layout_height="104dp"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginEnd="1dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/image" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
