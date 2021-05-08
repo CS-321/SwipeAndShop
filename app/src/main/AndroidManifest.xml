@@ -35,8 +35,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SettingsPage" />
         </activity>
-        <activity android:name=".ProductPage" />
-        <activity android:name=".ChatPage" />
+        <activity android:name=".ProductPage"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ChatPage"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".FeedPage" />
         <activity android:name=".LoginPage" />
         <activity android:name=".CreateAccountPage" />

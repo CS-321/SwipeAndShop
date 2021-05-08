@@ -9,8 +9,8 @@
 
     <ScrollView
         android:id="@+id/scrollview_id"
-        android:layout_width="370dp"
-        android:layout_height="358dp"
+        android:layout_width="371dp"
+        android:layout_height="319dp"
         android:layout_marginBottom="84dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/include"
@@ -25,28 +25,40 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/seller_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/description_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-            <TextView
                 android:id="@+id/name_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="name_text" />
+                android:layout_height="42dp"
+                android:fontFamily="sans-serif-black"
+                android:text="name_text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/price_text"
                 android:layout_width="match_parent"
-                android:layout_height="127dp"
-                android:text="TextView" />
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/seller_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/description_text"
+                android:layout_width="match_parent"
+                android:layout_height="162dp"
+                android:fontFamily="sans-serif-black"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp" />
         </LinearLayout>
     </ScrollView>
 
