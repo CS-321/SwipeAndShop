@@ -3,6 +3,8 @@
     <string name="latitude">Sample Latitude</string>
     <string name="longitude">Sample Longitude</string>
     <string name="address">Sample Address</string>
+    <string name="go_to_chat">go to Chat</string>
+    <string name="go_to_settings">go to Settings</string>
     <string-array name="empty_array">
         <item>Nick</item>
         <item>Robert</item>

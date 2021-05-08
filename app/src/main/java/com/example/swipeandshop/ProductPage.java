@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +63,10 @@ public class ProductPage extends AppCompatActivity {
     Button addProductBtn;
     Button cancelProductBtn;
     Button saveProductBtn;
+
+    ImageButton settings;
+    ImageButton chat;
+    ImageButton feed;
 
     // Firebase references.
     FirebaseAuth firebaseAuth;
@@ -108,6 +113,10 @@ public class ProductPage extends AppCompatActivity {
         addProductBtn = findViewById(R.id.addProductBtn);
         productActivity = (Activity)this;
         products = new ArrayList<>();
+
+        settings = findViewById(R.id.settings);
+        feed = findViewById(R.id.feed);
+        chat = findViewById(R.id.chat);
 
         //Database
         firebaseAuth = FirebaseAuth.getInstance();
@@ -407,6 +416,27 @@ public class ProductPage extends AppCompatActivity {
 
     /**Set all the button listeners in the view.*/
     public void setButtonListeners(){
+        feed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), FeedPage.class));
+            }
+        });
+
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ChatPage.class));
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), SettingsPage.class));
+            }
+        });
+
         addProductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
