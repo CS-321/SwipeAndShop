@@ -154,7 +154,12 @@ public class FeedPage extends AppCompatActivity {
                 products.clear();
                 for(DataSnapshot item_snapshot:snapshot.getChildren()){
                     Product tempProduct = item_snapshot.getValue(Product.class);
-                    products.add(tempProduct);
+                    if(!tempProduct.getSellerId().equals(user.getUid().toString())){
+                        //check if ive already swiped right or left
+                        if(!dislikedProducts.containsKey(tempProduct.getProductId()) && !likedProducts.containsKey(tempProduct.getProductId())){
+                            products.add(tempProduct);
+                        }
+                    }
                 }
                 setAdapterInfo();
             }

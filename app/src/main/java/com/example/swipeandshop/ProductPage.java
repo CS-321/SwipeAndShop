@@ -168,8 +168,8 @@ public class ProductPage extends AppCompatActivity {
         EditText nameInput = findViewById(R.id.nameInput);
         nameInput.addTextChangedListener(new TextValidator(nameInput) {
             @Override public void validate(TextView textView, String text) {
-                if (text == null || text.isEmpty() || text.length() < 5 || text.length() > 14 ) {
-                    textView.setError("Name must be no more than 5 and less than 14 characters long");
+                if (text == null || text.isEmpty() || text.length() < 3 || text.length() > 35 ) {
+                    textView.setError("Name must be no more than 3 and less than 35 characters long");
                 }
             }
         });
@@ -178,9 +178,9 @@ public class ProductPage extends AppCompatActivity {
         descriptionInput.addTextChangedListener(new TextValidator(descriptionInput) {
             @Override public void validate(TextView textView, String text) {
                 String patt = "\r\n|\r|\n";
-                if (text == null || text.isEmpty() || text.length() < 10 || text.length() > 40 ||
+                if (text == null || text.isEmpty() || text.length() < 10 || text.length() > 100 ||
                 text.split(patt).length < 1 || text.split(patt).length > 2 ) {
-                    textView.setError("Short description must be 10..40 characters long and 2 lines max");
+                    textView.setError("Short description must be 10..100 characters long and 2 lines max");
                 }
             }
         });
@@ -266,7 +266,7 @@ public class ProductPage extends AppCompatActivity {
             product.setSeller(user.getEmail());
             product.setImageUrl(currentUrl);
             product.setImagePath(currentImagePath);
-            products.add(0,product);
+            products.add(currentLocation,product);
             myRef.child(product.productId).setValue(product);
             allProductRef.child(product.productId).setValue(product);
         }else{
@@ -300,7 +300,7 @@ public class ProductPage extends AppCompatActivity {
         addProductBtn.setVisibility(View.VISIBLE);
 
         //sets default image (will be changed to show current product image)
-        imageView.setImageResource(R.drawable.googleg_disabled_color_18);
+        //imageView.setImageResource(R.drawable.googleg_disabled_color_18);
         this.currentLocation = -1;
         this.currentUrl = "";
         this.currentImagePath = "";
@@ -386,6 +386,8 @@ public class ProductPage extends AppCompatActivity {
         // Get references to each text box.
         EditText name = (EditText) view.findViewById(R.id.nameInput);
         EditText description = (EditText) view.findViewById(R.id.descriptionInput);
+        EditText description2  = (EditText) view.findViewById(R.id.descriptionInput2);
+        EditText price  = (EditText) view.findViewById(R.id.priceInput);
 
         // get the product that was clicked on.
         Product product = products.get(productIndex);
@@ -399,6 +401,9 @@ public class ProductPage extends AppCompatActivity {
         // populate those text boxes.
         name.setText(product.getName());
         description.setText(product.getShortDescription());
+        description2.setText(product.getLongDescription());
+        price.setText(Float.toString(product.getPrice()));
+
 
         // set the current location of the product in the products list to be used for later.
         this.currentLocation = productIndex;
