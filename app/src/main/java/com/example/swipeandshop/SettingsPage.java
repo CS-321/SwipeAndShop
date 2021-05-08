@@ -29,7 +29,7 @@ public class SettingsPage extends AppCompatActivity {
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginPage.class);
         startActivity(intent);
     }
 
