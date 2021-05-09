@@ -257,15 +257,24 @@ public class ChatPage extends AppCompatActivity {
             otherRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    HashMap<String, Chat> testing = new HashMap<>();
+                    HashMap<String, ChatMessage> testing = new HashMap<>();
                     if(currentChat != null){
                         System.out.println( "keyssss" + snapshot.getKey());
                         for(DataSnapshot item_snapshot:snapshot.getChildren()){
                             //Product tempProduct = item_snapshot.getValue(Chat.class);
                             // make sure user hasn't already swiped on this object.
-                            System.out.println(item_snapshot.getValue().toString());
-                            //testing.put(snapshot.getValue().toString(),);
+                            ChatMessage cool  = item_snapshot.getValue(ChatMessage.class);
+                            testing.put(item_snapshot.getKey(), cool);
                         }
+
+                        for(int i = 0; i < testing.size(); i++){
+                            String check = "0" + Integer.toString(i+1);
+                            newChatMessages.add(testing.get(check));
+                        }
+                        adapter = new ChatMessageAdapter(adapter.getContext(), newChatMessages);
+// Attach the adapter to a ListView
+                        ListView listView = (ListView) findViewById(R.id.messageList);
+                        listView.setAdapter(adapter);
                     }
 
                 }
