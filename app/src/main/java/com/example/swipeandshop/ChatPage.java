@@ -23,6 +23,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChatPage extends AppCompatActivity {
@@ -42,6 +44,7 @@ public class ChatPage extends AppCompatActivity {
     FirebaseRecyclerOptions<Chat> chatOptions;
     ArrayAdapter<ChatMessage> itemsAdapter;
     ArrayList<ChatMessage> chatMessages;
+    ChatMessageAdapter adapter;
     List<Chat> chats;
     RecyclerView productCardList;
     FirebaseUser user;
@@ -53,6 +56,7 @@ public class ChatPage extends AppCompatActivity {
     Button sendMessageBtn;
     View chatView;
     Chat currentChat = null;
+    ChatPage pg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class ChatPage extends AppCompatActivity {
             finish();
             return;
         }
+        pg = this;
 
         chatCardList = findViewById(R.id.chatsList); //holds all the users products
         database = FirebaseDatabase.getInstance();
@@ -117,6 +122,7 @@ public class ChatPage extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ChatViewHolder chatViewHolder, int i, @NonNull Chat chat) {
                 chatViewHolder.name.setText(chat.getChatName());
+
                 //Used to get which item is clicked on in the view.
                 chatViewHolder.bindData(new ViewHolderCallback(){
                     @Override
@@ -164,10 +170,11 @@ public class ChatPage extends AppCompatActivity {
                 for(DataSnapshot item_snapshot:snapshot.getChildren()){
                     //Product tempProduct = item_snapshot.getValue(Chat.class);
                     // make sure user hasn't already swiped on this object.
-                    System.out.println(snapshot.getValue().toString());
                     Chat tempChat = item_snapshot.getValue(Chat.class);
                     chats.add(tempChat);
                 }
+
+
             }
 
 
@@ -215,7 +222,7 @@ public class ChatPage extends AppCompatActivity {
             String check = "0" + Integer.toString(i+1);
             newChatMessages.add(currentChat.messages.get(check));
         }
-        ChatMessageAdapter adapter = new ChatMessageAdapter(this, newChatMessages);
+        adapter = new ChatMessageAdapter(this, newChatMessages);
 // Attach the adapter to a ListView
         ListView listView = (ListView) findViewById(R.id.messageList);
         listView.setAdapter(adapter);
@@ -243,10 +250,30 @@ public class ChatPage extends AppCompatActivity {
                 String check = "0" + Integer.toString(i+1);
                 newChatMessages.add(currentChat.messages.get(check));
             }
-            ChatMessageAdapter adapter = new ChatMessageAdapter(this, newChatMessages);
+            adapter = new ChatMessageAdapter(this, newChatMessages);
 // Attach the adapter to a ListView
             ListView listView = (ListView) findViewById(R.id.messageList);
             listView.setAdapter(adapter);
+            otherRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    HashMap<String, Chat> testing = new HashMap<>();
+                    if(currentChat != null){
+                        System.out.println( "keyssss" + snapshot.getKey());
+                        for(DataSnapshot item_snapshot:snapshot.getChildren()){
+                            //Product tempProduct = item_snapshot.getValue(Chat.class);
+                            // make sure user hasn't already swiped on this object.
+                            System.out.println(item_snapshot.getValue().toString());
+                            //testing.put(snapshot.getValue().toString(),);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
         }
     }
 
